@@ -1,5 +1,15 @@
 function knightMoves(start, end) {
-    // stores all visted cells, doubles as a visual representation of the board state
+    // immediately check if start and end are valid (>=0, <=7)
+    if(start[0] < 0 || start[0] > 7 ||
+        start[1] < 0 || start[1] > 7 ||
+        end[0] < 0 || end[0] > 7 ||
+        end[1] < 0 || end[1] > 7) {
+        console.log("At least one of the coords you input is invalid, please try again. (Coords must be >=0 and <=7)");
+        console.log();
+        return [];
+    }
+
+    // stores all visted cells, doubles as a visual representation of the board state (is an 8x8 2d array, with each cell containing 1 blankspace)
     const board = Array.from(Array(8), _ => Array(8).fill(' '));
 
     // queue array for storing cells to compare with end, each item will be: [[x, y], [...pathToThisCell]]
@@ -35,7 +45,17 @@ function knightMoves(start, end) {
         }
     }
 
+    printResult(out);
     return out;
+}
+
+
+function printResult(arr) {
+    console.log(`You made it in ${arr.length - 1} move(s)!  Here's your path:`);
+    for(let i = 0; i < arr.length; i++) {
+        console.log(`[${arr[i][0]},${arr[i][1]}]`);
+    }
+    console.log();
 }
 
 
@@ -56,7 +76,7 @@ function getMoves(board, cell) {
         [row-2, col-1]
     ]
 
-    // remove out of bounds moves + remove moves to already visited cells on the input board
+    // remove: out of bounds moves, moves to already visited cells on the input board
     for(let i = 0; i < out.length; i++) {
         // some part is out of bounds (assuming using a normal 8x8 chess grid)
         if(out[i][0] < 0 || out[i][0] > 7 || out[i][1] < 0 || out[i][1] > 7) {
@@ -77,13 +97,13 @@ function getMoves(board, cell) {
 
 
 // mainly for debugging
-function printBoard(board, recent) {
+function printBoard(board, recent = null) {
     console.log("x  0  1  2  3  4  5  6  7");
     for(let r = 0; r < board.length; r++) {
         let rowStr = `${r}  `;
         for(c = 0; c < board[0].length; c++) {
             // basically just shows the most recently visited cell as an "X" instead of a "*"
-            if(r === recent[0] && c === recent[1]) {
+            if(recent !== null && r === recent[0] && c === recent[1]) {
                 rowStr += `X  `;
             }
             else {
